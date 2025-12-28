@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Graduation cap in indigo color with transparent background -->
+  <g fill="#6366f1">
+    <!-- Cap top (mortarboard) -->
+    <path d="M16 8l-12 4.5v1.5l12 4.5 12-4.5v-1.5z"/>
+    <!-- Tassel -->
+    <circle cx="21" cy="11" r="1.5"/>
+    <line x1="20" y1="12" x2="19" y2="14" stroke="#6366f1" stroke-width="0.8" fill="none"/>
+    <!-- Cap bottom/band -->
+    <path d="M8 14v4c0 2.5 3.5 4.5 8 4.5s8-2 8-4.5v-4l-8 3z" opacity="0.9"/>
+  </g>
+</svg>

@@ -1,8 +1,52 @@
 import { useState } from "react";
-import { Camera, Play, X } from "lucide-react";
+import { Camera, Play, X, Pause } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import { cn } from "@/lib/utils";
+
+// Video Card Component
+const VideoCard = ({ title, videoSrc }: { title: string; videoSrc: string }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+
+  const handlePlayPause = (e: React.MouseEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  return (
+    <div
+      className="group relative"
+      onMouseEnter={() => setShowControls(true)}
+      onMouseLeave={() => setShowControls(false)}
+    >
+      <div className="aspect-video rounded-2xl overflow-hidden bg-muted border border-border hover:border-primary/50 transition-all hover:shadow-lg">
+        <video
+          src={videoSrc}
+          className="w-full h-full object-cover cursor-pointer"
+          onClick={handlePlayPause}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          controls={showControls}
+        />
+        {!isPlaying && (
+          <div className="absolute inset-0 flex items-center justify-center bg-foreground/20 backdrop-blur-[2px] group-hover:bg-foreground/30 transition-colors">
+            <div className="w-16 h-16 rounded-full bg-card/90 border-2 border-primary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+              <Play className="w-6 h-6 text-primary ml-1" />
+            </div>
+          </div>
+        )}
+      </div>
+      <p className="mt-3 text-sm font-medium text-foreground text-center">{title}</p>
+    </div>
+  );
+};
 
 const Events = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -47,8 +91,8 @@ const Events = () => {
     { id: 22, title: "Movie Time with Popcorn", category: "special-days", color: "bg-lavender" },
   ];
 
-  const filteredEvents = selectedCategory === "all" 
-    ? events 
+  const filteredEvents = selectedCategory === "all"
+    ? events
     : events.filter(e => e.category === selectedCategory);
 
   return (
@@ -95,7 +139,7 @@ const Events = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredEvents.map((event, index) => (
-              <div 
+              <div
                 key={event.id}
                 className="group cursor-pointer animate-scale-in"
                 style={{ animationDelay: `${index * 0.05}s` }}
@@ -133,26 +177,105 @@ const Events = () => {
           <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
             Watch memorable moments from our events and celebrations
           </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {[1, 2, 3].map((video) => (
-              <div 
-                key={video}
-                className="aspect-video rounded-2xl bg-muted border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 transition-colors group"
-              >
-                <div className="w-16 h-16 rounded-full bg-card border border-border flex items-center justify-center mb-4 group-hover:bg-primary group-hover:border-primary transition-colors">
-                  <Play className="w-6 h-6 text-muted-foreground group-hover:text-primary-foreground transition-colors" />
-                </div>
-                <p className="text-muted-foreground font-medium">Video {video}</p>
-                <p className="text-xs text-muted-foreground/60 mt-1">Add your video here</p>
-              </div>
-            ))}
+
+          {/* Cultural Celebrations */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-heading font-semibold text-foreground mb-6 flex items-center gap-2">
+              <span className="w-2 h-8 bg-primary rounded-full"></span>
+              Cultural Celebrations
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <VideoCard title="Onam Celebration - Part 1" videoSrc="/video/onam 1.mp4" />
+              <VideoCard title="Onam Celebration - Part 2" videoSrc="/video/onam 2.mp4" />
+              <VideoCard title="Graduation Day" videoSrc="/video/graduationday 1.mp4" />
+            </div>
+          </div>
+
+          {/* Special Days & Celebrations */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-heading font-semibold text-foreground mb-6 flex items-center gap-2">
+              <span className="w-2 h-8 bg-secondary rounded-full"></span>
+              Special Days & Celebrations
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <VideoCard title="Children's Day" videoSrc="/video/childrenday 1.mp4" />
+              <VideoCard title="Sports Day - Part 1" videoSrc="/video/sports day 1.mp4" />
+              <VideoCard title="Sports Day - Part 2" videoSrc="/video/sports day 2.mp4" />
+              <VideoCard title="Nutrition Week" videoSrc="/video/nutrition week 1.mp4" />
+            </div>
+          </div>
+
+          {/* Color Days */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-heading font-semibold text-foreground mb-6 flex items-center gap-2">
+              <span className="w-2 h-8 bg-mint rounded-full"></span>
+              Color Days
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <VideoCard title="Pink Day - Part 1" videoSrc="/video/viedo 1 pink day.mp4" />
+              <VideoCard title="Pink Day - Part 2" videoSrc="/video/pinkday2.mp4" />
+              <VideoCard title="Green Day - Part 1" videoSrc="/video/greenday1.mp4" />
+              <VideoCard title="Green Day - Part 2" videoSrc="/video/greenday2.mp4" />
+            </div>
+          </div>
+
+          {/* Learning Activities */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-heading font-semibold text-foreground mb-6 flex items-center gap-2">
+              <span className="w-2 h-8 bg-sunshine rounded-full"></span>
+              Learning Activities
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <VideoCard title="KG Activity" videoSrc="/video/kg activity 1.mp4" />
+              <VideoCard title="Quality Time with Students - Part 1" videoSrc="/video/qtsws 1.mp4" />
+              <VideoCard title="Quality Time with Students - Part 2" videoSrc="/video/qtsws 2.mp4" />
+              <VideoCard title="Fun with GR Students" videoSrc="/video/fun with gr .mp4" />
+              <VideoCard title="Movie Time" videoSrc="/video/movie time 1.mp4" />
+            </div>
+          </div>
+
+          {/* Field Trips & Outdoor Activities */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-heading font-semibold text-foreground mb-6 flex items-center gap-2">
+              <span className="w-2 h-8 bg-sky rounded-full"></span>
+              Field Trips
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <VideoCard title="Field Trip - Part 1" videoSrc="/video/field 1.mp4" />
+              <VideoCard title="Field Trip - Part 2" videoSrc="/video/field 2.mp4" />
+            </div>
+          </div>
+
+          {/* Competitions & Activities */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-heading font-semibold text-foreground mb-6 flex items-center gap-2">
+              <span className="w-2 h-8 bg-coral rounded-full"></span>
+              Competitions & Creative Activities
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <VideoCard title="Best Out of Waste - Fancy Dress" videoSrc="/video/bestoow 1.mp4" />
+            </div>
+          </div>
+
+          {/* Parent Testimonials */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-heading font-semibold text-foreground mb-6 flex items-center gap-2">
+              <span className="w-2 h-8 bg-blush rounded-full"></span>
+              What Parents Say
+            </h3>
+            <p className="text-muted-foreground mb-6 max-w-3xl">
+              Hear from happy parents sharing their wonderful experiences and thoughts about our teaching approach
+            </p>
+            <div className="grid md:grid-cols-2 gap-6 max-w-3xl">
+              <VideoCard title="Happy Parents Testimonials" videoSrc="/video/happy parent.mp4" />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Lightbox */}
       {lightboxImage && (
-        <div 
+        <div
           className="fixed inset-0 z-50 bg-foreground/80 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setLightboxImage(null)}
         >
